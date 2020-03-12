@@ -1,0 +1,58 @@
+---
+title: "hw3"
+author: "Jeremy Knox"
+date: "3/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(dplyr)
+
+df <- read_csv("SMOKING_ESM246.csv")
+```
+The outcome and treatment variables are:
+birthwgt = birth weight of infant in grams 
+tobacco = indicator for maternal smoking
+The control variables are:
+mage (mother's age), meduc (mother's education), mblack (=1 if mother black), alcohol (=1 if consumed alcohol during pregnancy), first (=1 if first child), diabete (=1 if mother diabetic), anemia (=1 if mother anemic)
+
+(a) What is the unadjusted mean difference in birth weight of infants with smoking and non- smoking mothers? Under what hypothesis does this correspond to the average treatment effect of maternal smoking during pregnancy on infant birth weight? Provide some simple empirical evidence for or against this hypothesis.
+```{r}
+smoking_mothers <- df %>% 
+  filter(tobacco == 1)
+nonsmoking_mothers <- df %>% 
+  filter(tobacco == 0)
+(mean(nonsmoking_mothers$birthwgt) - mean(smoking_mothers$birthwgt))
+```
+The unadjusted mean difference in birth weight of infants with smoking and non-smoking mothers is 244.5394. Meaning, mothers that do not smoke have infants that weight 244 grams more on average. 
+
+
+
+(b) Assume that maternal smoking is randomly assigned conditional on the observable covariates listed above. Estimate the effect of maternal smoking on birth weight using a linear regression. Report the estimated coefficient on tobacco and its standard error.
+```{r}
+m1 <- lm(birthwgt ~ tobacco, data=df)
+summary(m1)
+```
+The estimated effect of maternal smoking on birth weight of infants is -244.286 grams with a standard error of 4.079. Meaning, this is statistically significant with any resonable significance level. However, this model described less than 4% of the variability in birthweights decribed by maternal smoking.
+
+
+
+(c) Use the exact matching estimator to estimate the effect of maternal smoking on birth weight. For simplicity, consider the following covariates in your matching estimator: create a 0-1 indicator for mother's age (=1 if mage>=34), and a 0-1 indicator for mother's education (1 if meduc>=16), mother's race (mblack), and alcohol consumption indicator (alcohol). These 4 covariates will create 2*2*2*2 = 16 cells. Report the estimated causal effect of tobacco on birthweight using the exact matching estimator and its linear regression analogue (Lecture 7, slides 16-19).
+```{r}
+
+```
+
+
+
+(d) Estimate the propensity score for maternal smoking using a logit estimator and based on the following specification: mother’s age, mother’s age squared, mother’s education, and indicators for mother’s race, and alcohol consumption.
+
+
+
+(e) Use the p-score weighted regression (WLS) to estimate the effect of maternal smoking on birth weight (Lecture 8, slide 14).
+
+
+
+
+
